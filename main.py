@@ -2,6 +2,8 @@ from pypdf import PdfReader
 from sys import argv
 import re
 
+CATEGORIES = ("Achat", "Dépôt", "Intérêt", "Ouverture", "Retrait", "Solde", "Virement")
+
 
 def extract_text_from_pdf(pdf_path):
     reader = PdfReader(pdf_path)
@@ -24,6 +26,19 @@ def get_dates_from_text(text):
     return dates
 
 
+def get_descriptions_from_text(text):
+    descriptions = []
+
+    for line in text.split("\n"):
+        if line.startswith(CATEGORIES):
+            for category in CATEGORIES:
+                line = line.replace(category, f";{category}")
+
+            descriptions.extend(line.split(";")[1:])
+
+    return descriptions
+
+
 if __name__ == "__main__":
     pdf_path = argv[1]
     extracted_text = extract_text_from_pdf(pdf_path)
@@ -31,3 +46,6 @@ if __name__ == "__main__":
 
     dates = get_dates_from_text(extracted_text)
     print("Extracted Dates:", dates)
+
+    descriptions = get_descriptions_from_text(extracted_text)
+    print("Extracted Descriptions:", descriptions)
