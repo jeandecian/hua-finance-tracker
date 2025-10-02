@@ -44,8 +44,9 @@ if __name__ == "__main__":
     extracted_text = extract_text_from_pdf(pdf_path)
     save_text_to_file(extracted_text, pdf_path.split(".")[0] + ".txt")
 
-    dates = get_dates_from_text(extracted_text)
-    print("Extracted Dates:", dates)
+    transactions = {
+        "Date": get_dates_from_text(extracted_text),
+        "Description": get_descriptions_from_text(extracted_text),
+    }
 
-    descriptions = get_descriptions_from_text(extracted_text)
-    print("Extracted Descriptions:", descriptions)
+    print(transactions)
