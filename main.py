@@ -1,5 +1,6 @@
 from pypdf import PdfReader
 from sys import argv
+import re
 
 
 def extract_text_from_pdf(pdf_path):
@@ -17,7 +18,16 @@ def save_text_to_file(text, file_path):
         text_file.write(text)
 
 
+def get_dates_from_text(text):
+    dates = re.findall(r"(?:0?[1-9]|[12]\d|3[01])\s[A-Z]{3}", text)
+
+    return dates
+
+
 if __name__ == "__main__":
     pdf_path = argv[1]
     extracted_text = extract_text_from_pdf(pdf_path)
     save_text_to_file(extracted_text, pdf_path.split(".")[0] + ".txt")
+
+    dates = get_dates_from_text(extracted_text)
+    print("Extracted Dates:", dates)
